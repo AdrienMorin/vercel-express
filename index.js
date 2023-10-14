@@ -8,8 +8,9 @@ const port = 3000;
 
 // Serve a default page. This function is not required. Serving up a spy.gif for the homepage.
 app.get('/', (req, res) => {
-    const spyMeme = "./spy.gif";
-    res.sendFile(spyMeme, { root: __dirname });
+    //const spyMeme = "./spy.gif";
+    //res.sendFile(spyMeme, { root: __dirname });
+    res.send('Hey this is my API running 🥳')
 });
 
 app.get('/image', (req, res) => {
