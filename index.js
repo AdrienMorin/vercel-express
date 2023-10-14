@@ -4,7 +4,7 @@ const express = require('express')
 const app = express()
 const fs = require('fs');
 const request = require('request');
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 // Serve a default page. This function is not required. Serving up a spy.gif for the homepage.
 app.get('/', (req, res) => {
