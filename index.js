@@ -46,20 +46,20 @@ app.get('/', (req, res) => {
 });
 */
 app.get('/', async (req, res) => {
-    // Log the User-Agent String.
-    const user_agent = req.headers['user-agent'];
-
-    // Get the current time of request and format time into a readable format.
-    const current_time = new Date();
-    const timestamp = current_time.toISOString().slice(0, 19).replace('T', ' ');
-
-    // Log the IP address of the requester.
-    const get_ip = req.ip;
-
-    console.log("ip: ", get_ip);
-
-    // Lookup Geolocation of IP Address.
     try {
+        // Log the User-Agent String.
+        const user_agent = req.headers['user-agent'];
+
+        // Get the current time of request and format time into a readable format.
+        const current_time = new Date();
+        const timestamp = current_time.toISOString().slice(0, 19).replace('T', ' ');
+
+        // Get the IP address of the requester from x-forwarded-for header
+        const get_ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+        console.log("IP: ", get_ip);
+
+        // Lookup Geolocation of IP Address.
         const apiKey = '18577af5b67323'; // Remplacez par votre clé API IPinfo
 
         const apiUrl = `https://ipinfo.io/${get_ip}/json?token=${apiKey}`;
