@@ -28,23 +28,16 @@ async function getIpLocation( ipAddress) {
             console.log('Pays :', data.country);
             console.log('Code postal :', data.postal);
             console.log('Coordonnées géographiques :', data.loc);
+            return data;
         } else {
             console.error('La demande a échoué avec le statut', response.status);
+            return "Failed to fetch IP info"
         }
     } catch (error) {
         console.error('Une erreur s\'est produite :', error);
     }
 }
 
-
-// Serve a default page. This function is not required. Serving up a spy.gif for the homepage.
-/*
-app.get('/', (req, res) => {
-    //const spyMeme = "./spy.gif";
-    //res.sendFile(spyMeme, { root: __dirname });
-    res.sendFile(spyFilePath)
-});
-*/
 app.get('/', async (req, res) => {
     try {
         // Log the User-Agent String.
@@ -57,30 +50,21 @@ app.get('/', async (req, res) => {
         // Get the IP address of the requester from x-forwarded-for header
         const get_ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-        console.log("IP: ", get_ip);
+        // Get the user agent
+        const userAgent = req.headers['user-agent'];
 
-        // Lookup Geolocation of IP Address.
-        const apiKey = '18577af5b67323'; // Remplacez par votre clé API IPinfo
+        console.log("headers: ", req.headers)
 
-        const apiUrl = `https://ipinfo.io/${get_ip}/json?token=${apiKey}`;
+        const ipInfo = await getIpLocation(get_ip);
+        res.send({ipInfo, userAgent});
 
-        const response = await fetch(apiUrl);
-        if (response.ok) {
-            const data = await response.json();
-            console.log('Emplacement de l\'adresse IP', get_ip, ':');
-            console.log('IP :', data.ip);
-            console.log('Ville :', data.city);
-            console.log('Région :', data.region);
-            console.log('Pays :', data.country);
-            console.log('Code postal :', data.postal);
-            console.log('Coordonnées géographiques :', data.loc);
-            res.send(data);
-        } else {
-            console.error('La demande a échoué avec le statut', response.status);
-        }
     } catch (error) {
         console.error('Une erreur s\'est produite :', error);
     }
+});
+
+app.get('/test', (req, res) => {
+    res.send("test");
 });
 
 app.listen(port, () => {
