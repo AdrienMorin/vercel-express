@@ -64,10 +64,14 @@ app.get('/', (req, res) => {
                 }
             });
 
-            gitCommitAndPush().then(r => console.log("pushed data into git : ", log_entry));
+            console.log("Retrieved data : ", log_entry);
+
+            res.send(log_entry);
+
+            //gitCommitAndPush().then(r => console.log("pushed data into git : ", log_entry));
 
             // Serve a transparent pixel image when navigating to .../image URL.
-            res.sendFile(pixelFilePath);
+            //res.sendFile(pixelFilePath);
         } else {
             console.error(error);
             res.status(500).send('Error retrieving geolocation data');
