@@ -12,24 +12,30 @@ const spyFilePath = path.join(__dirname, 'spy.gif');
 const pixelFilePath = path.join(__dirname, 'pixel.png');
 const spy_pixel_logsFilePath = path.join(__dirname, 'spy_pixel_logs.txt');
 
-const simpleGit = require('simple-git')();
-
-async function gitCommitAndPush() {
+async function getIpLocation( ipAddress) {
     try {
-        // Ajoute tous les fichiers modifiés et non suivis (équivalent à 'git add .')
-        await simpleGit.add('.');
+        const apiKey = '18577af5b67323'; // Remplacez par votre clé API IPinfo
 
-        // Effectue un commit avec le message spécifié
-        await simpleGit.commit('updating logs');
+        const apiUrl = `https://ipinfo.io/${ipAddress}/json?token=${apiKey}`;
 
-        // Pousse les modifications vers le référentiel distant
-        await simpleGit.push();
-
-        console.log('Changements ajoutés, commit réalisé et poussé avec succès.');
+        const response = await fetch(apiUrl);
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Emplacement de l\'adresse IP', ipAddress, ':');
+            console.log('IP :', data.ip);
+            console.log('Ville :', data.city);
+            console.log('Région :', data.region);
+            console.log('Pays :', data.country);
+            console.log('Code postal :', data.postal);
+            console.log('Coordonnées géographiques :', data.loc);
+        } else {
+            console.error('La demande a échoué avec le statut', response.status);
+        }
     } catch (error) {
         console.error('Une erreur s\'est produite :', error);
     }
 }
+
 
 // Serve a default page. This function is not required. Serving up a spy.gif for the homepage.
 /*
@@ -39,7 +45,7 @@ app.get('/', (req, res) => {
     res.sendFile(spyFilePath)
 });
 */
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     // Log the User-Agent String.
     const user_agent = req.headers['user-agent'];
 
@@ -50,33 +56,31 @@ app.get('/', (req, res) => {
     // Log the IP address of the requester.
     const get_ip = req.ip;
 
+    console.log("ip: ", get_ip);
+
     // Lookup Geolocation of IP Address.
-    const apiUrl = `https://geolocation-db.com/jsonp/${get_ip}`;
-    request(apiUrl, (error, response, body) => {
-        if (!error && response.statusCode == 200) {
-            const data = body.split('(')[1].slice(0, -1);
-            const log_entry = `Email Opened:\nTimestamp: ${timestamp}\nUser Agent: ${user_agent}\nIP Address: ${data}\n`;
+    try {
+        const apiKey = '18577af5b67323'; // Remplacez par votre clé API IPinfo
 
-            // Write log to hardcoded path. Must be an absolute path to the log file.
-            fs.appendFile(spy_pixel_logsFilePath, log_entry, (err) => {
-                if (err) {
-                    console.error(err);
-                }
-            });
+        const apiUrl = `https://ipinfo.io/${get_ip}/json?token=${apiKey}`;
 
-            console.log("Retrieved data : ", log_entry);
-
-            res.send(log_entry);
-
-            //gitCommitAndPush().then(r => console.log("pushed data into git : ", log_entry));
-
-            // Serve a transparent pixel image when navigating to .../image URL.
-            //res.sendFile(pixelFilePath);
+        const response = await fetch(apiUrl);
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Emplacement de l\'adresse IP', get_ip, ':');
+            console.log('IP :', data.ip);
+            console.log('Ville :', data.city);
+            console.log('Région :', data.region);
+            console.log('Pays :', data.country);
+            console.log('Code postal :', data.postal);
+            console.log('Coordonnées géographiques :', data.loc);
+            res.send(data);
         } else {
-            console.error(error);
-            res.status(500).send('Error retrieving geolocation data');
+            console.error('La demande a échoué avec le statut', response.status);
         }
-    });
+    } catch (error) {
+        console.error('Une erreur s\'est produite :', error);
+    }
 });
 
 app.listen(port, () => {
