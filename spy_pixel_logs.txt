@@ -2,3 +2,7 @@ Email Opened:
 Timestamp: 2023-10-15 14:07:04
 User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36
 IP Address: {"country_code":"Not found","country_name":"Not found","city":"Not found","postal":"Not found","latitude":"Not found","longitude":"Not found","IPv4":"IP Not found","state":"Not found"}
+Email Opened:
+Timestamp: 2023-10-15 14:13:21
+User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36
+IP Address: {"country_code":"Not found","country_name":"Not found","city":"Not found","postal":"Not found","latitude":"Not found","longitude":"Not found","IPv4":"IP Not found","state":"Not found"}

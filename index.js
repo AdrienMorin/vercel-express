@@ -12,6 +12,25 @@ const spyFilePath = path.join(__dirname, 'spy.gif');
 const pixelFilePath = path.join(__dirname, 'pixel.png');
 const spy_pixel_logsFilePath = path.join(__dirname, 'spy_pixel_logs.txt');
 
+const simpleGit = require('simple-git')();
+
+async function gitCommitAndPush() {
+    try {
+        // Ajoute tous les fichiers modifiés et non suivis (équivalent à 'git add .')
+        await simpleGit.add('.');
+
+        // Effectue un commit avec le message spécifié
+        await simpleGit.commit('updating logs');
+
+        // Pousse les modifications vers le référentiel distant
+        await simpleGit.push();
+
+        console.log('Changements ajoutés, commit réalisé et poussé avec succès.');
+    } catch (error) {
+        console.error('Une erreur s\'est produite :', error);
+    }
+}
+
 // Serve a default page. This function is not required. Serving up a spy.gif for the homepage.
 /*
 app.get('/', (req, res) => {
@@ -44,6 +63,8 @@ app.get('/', (req, res) => {
                     console.error(err);
                 }
             });
+
+            gitCommitAndPush().then(r => console.log("pushed data into git : ", log_entry));
 
             // Serve a transparent pixel image when navigating to .../image URL.
             res.sendFile(pixelFilePath);
