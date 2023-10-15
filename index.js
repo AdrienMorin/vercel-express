@@ -12,6 +12,8 @@ const spyFilePath = path.join(__dirname, 'spy.gif');
 const pixelFilePath = path.join(__dirname, 'pixel.png');
 const spy_pixel_logsFilePath = path.join(__dirname, 'spy_pixel_logs.txt');
 
+let dataFromMail = "";
+
 async function getIpLocation( ipAddress) {
     try {
         const apiKey = '18577af5b67323'; // Remplacez par votre clé API IPinfo
@@ -56,6 +58,7 @@ app.get('/', async (req, res) => {
         console.log("headers: ", req.headers)
 
         const ipInfo = await getIpLocation(get_ip);
+        dataFromMail = {ipInfo, userAgent};
         res.send({ipInfo, userAgent});
 
     } catch (error) {
@@ -63,8 +66,8 @@ app.get('/', async (req, res) => {
     }
 });
 
-app.get('/test', (req, res) => {
-    res.send("test");
+app.get('/dataFromMail', (req, res) => {
+    res.send(dataFromMail);
 });
 
 app.listen(port, () => {
