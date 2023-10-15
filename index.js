@@ -14,7 +14,7 @@ const spyFilePath = path.join(__dirname, 'spy.gif');
 app.get('/', (req, res) => {
     //const spyMeme = "./spy.gif";
     //res.sendFile(spyMeme, { root: __dirname });
-    res.send('Hey this is my API running 🥳')
+    res.sendFile(spyFilePath)
 });
 
 app.get('/test', (req, res) => {
