@@ -6,11 +6,21 @@ const fs = require('fs');
 const request = require('request');
 const port = 3000;
 
+const path = require('path');
+// chemin absolu du fichier
+const spyFilePath = path.join(__dirname, 'spy.gif');
+
 // Serve a default page. This function is not required. Serving up a spy.gif for the homepage.
 app.get('/', (req, res) => {
     //const spyMeme = "./spy.gif";
     //res.sendFile(spyMeme, { root: __dirname });
     res.send('Hey this is my API running 🥳')
+});
+
+app.get('/test', (req, res) => {
+    //const spyMeme = "./spy.gif";
+    //res.sendFile(spyMeme, { root: __dirname });
+    res.sendFile(spyFilePath)
 });
 
 app.get('/image', (req, res) => {
