@@ -58,8 +58,12 @@ app.get('/', async (req, res) => {
         console.log("headers: ", req.headers)
 
         const ipInfo = await getIpLocation(get_ip);
+
+        // Update the data variable
         dataFromMail = {ipInfo, userAgent};
-        res.send({ipInfo, userAgent});
+
+        // Send the pixel
+        res.sendFile(pixelFilePath);
 
     } catch (error) {
         console.error('Une erreur s\'est produite :', error);
