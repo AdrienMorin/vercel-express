@@ -10,7 +10,8 @@ const path = require('path');
 // chemin absolu du fichier
 const spyFilePath = path.join(__dirname, 'spy.gif');
 const pixelFilePath = path.join(__dirname, 'pixel.png');
-const spy_pixel_logsFilePath = path.join(__dirname, 'spy_pixel_logs.txt');
+
+let consultations = [];
 
 let dataFromMail = "";
 
@@ -48,19 +49,20 @@ app.get('/', async (req, res) => {
         // Get the current time of request and format time into a readable format.
         const current_time = new Date();
         const timestamp = current_time.toISOString().slice(0, 19).replace('T', ' ');
-
         // Get the IP address of the requester from x-forwarded-for header
         const get_ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
         // Get the user agent
         const userAgent = req.headers['user-agent'];
 
-        console.log("headers: ", req.headers)
+        //console.log("request: ", req)
 
         const ipInfo = await getIpLocation(get_ip);
 
         // Update the data variable
         dataFromMail = {ipInfo, userAgent};
+
+        consultations.push(dataFromMail)
 
         // Send the pixel
         res.sendFile(pixelFilePath);
@@ -71,11 +73,14 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/dataFromMail', (req, res) => {
-    res.send(dataFromMail);
+    res.send({
+        nbConsultations: consultations.length,
+        infos: consultations
+    });
 });
 
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on http://localhost:${port}/`);
 });
 
 // Export the Express API
